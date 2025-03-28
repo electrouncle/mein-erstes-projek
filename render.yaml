@@ -10,4 +10,6 @@ services:
       - key: PORT
         value: 10000
     healthCheckPath: /
-    autoDeploy: true 
+    autoDeploy: true
+    plan: free
+    region: frankfurt 
