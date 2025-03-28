@@ -11,9 +11,17 @@ app.use((req, res, next) => {
     next();
 });
 
+// CORS Middleware
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
 // Basis-Route
 app.get('/', (req, res) => {
     console.log('Basis-Route wurde aufgerufen');
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.send('Willkommen bei meiner ersten Web-Anwendung!');
 });
 
@@ -23,6 +31,7 @@ app.get('/addiere/:a/:b', (req, res) => {
     const b = parseInt(req.params.b);
     const ergebnis = a + b;
     console.log(`Addiere ${a} + ${b} = ${ergebnis}`);
+    res.setHeader('Content-Type', 'application/json');
     res.json({ ergebnis });
 });
 
@@ -39,7 +48,16 @@ app.use((req, res) => {
 });
 
 // Server starten
-app.listen(port, '0.0.0.0', () => {
+const server = app.listen(port, '0.0.0.0', () => {
     console.log(`Server läuft auf Port ${port}`);
     console.log(`Server ist bereit für Anfragen`);
+});
+
+// Graceful Shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM Signal empfangen. Server wird beendet...');
+    server.close(() => {
+        console.log('Server wurde beendet');
+        process.exit(0);
+    });
 });
