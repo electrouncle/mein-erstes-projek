@@ -3,7 +3,11 @@ services:
     name: mein-erstes-projekt
     env: node
     buildCommand: npm install
-    startCommand: node index.js
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
-        value: production 
+        value: production
+      - key: PORT
+        value: 10000
+    healthCheckPath: /
+    autoDeploy: true 
